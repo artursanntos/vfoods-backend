@@ -3,6 +3,86 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
+}
+
+
+
+model Gestor {
+  id  String @id @default(uuid())
+  nome String
+  imagem String
+  email String @unique
+  area String
+  senha String   
+  
+  colaboradores Colaborador[]
+  indicadores Indicador[]
+}
+
+
+
+model Colaborador {
+  id  String @id @default(uuid())
+  nome  String // not null
+  email String @unique // not null
+  telefone  String @unique // not null
+  cargo String
+  data_admissao DateTime @default(now())
+  endereco  String
+  cep String
+  imagem  String
+
+  colaboradorIndicadores ColaboradorIndicador[]
+  notasMensais NotaMensalColaborador[]
+
+  // FK pra gestor
+  idGestor String
+  gestor Gestor @relation(fields: [idGestor], references: [id])
+}
+
+
+
+model Indicador {
+  id String @id @default(uuid())
+  nome String // not null
+  unidade_medida String
+  data_deadline DateTime
+  descricao String
+  colaboradorIndicadores ColaboradorIndicador[]
+  
+  //FK pra gestor
+  idGestor String
+  gestor Gestor @relation(fields: [idGestor], references: [id])
+}
+
+model NotaMensalColaborador {
+  id String @id @default(uuid())
+  mesAno DateTime
+  notaMensal Float // not null
+  
+  // FK pra Colaborador
+  idColaborador String
+  colaborador Colaborador @relation(fields: [idColaborador], references: [id])
+}
+
+
+
+model ColaboradorIndicador {
+  id String @id @default(uuid())
+  meta Int // not null
+  superMeta Int // not null
+  desafio Int // not null
+  peso Float // not null
+  resultado Float
+  notaIndicador Float
+
+  // FK para colaborador
+  idColaborador String
+  colaborador Colaborador @relation(fields:[idColaborador], references: [id])
+  
+  // FK para indicador
+  idIndicador String
+  indicador Indicador @relation(fields:[idIndicador], references: [id])
 }
