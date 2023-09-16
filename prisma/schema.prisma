@@ -12,7 +12,7 @@ datasource db {
 model Gestor {
   id  String @id @default(uuid())
   nome String
-  imagem String
+  imagem String?
   email String @unique
   area String
   senha String   
@@ -28,11 +28,11 @@ model Colaborador {
   nome  String // not null
   email String @unique // not null
   telefone  String @unique // not null
-  cargo String
+  cargo String?
   data_admissao DateTime @default(now())
-  endereco  String
-  cep String
-  imagem  String
+  endereco  String?
+  cep String?
+  imagem  String?
 
   colaboradorIndicadores ColaboradorIndicador[]
   notasMensais NotaMensalColaborador[]
@@ -47,9 +47,9 @@ model Colaborador {
 model Indicador {
   id String @id @default(uuid())
   nome String // not null
-  unidade_medida String
-  data_deadline DateTime
-  descricao String
+  unidade_medida String // not null
+  data_deadline DateTime // not null
+  descricao String?
   colaboradorIndicadores ColaboradorIndicador[]
   
   //FK pra gestor
@@ -60,7 +60,7 @@ model Indicador {
 model NotaMensalColaborador {
   id String @id @default(uuid())
   mesAno DateTime
-  notaMensal Float // not null
+  notaMensal Float?
   
   // FK pra Colaborador
   idColaborador String
@@ -71,12 +71,13 @@ model NotaMensalColaborador {
 
 model ColaboradorIndicador {
   id String @id @default(uuid())
+  mes_ano DateTime // not null
   meta Int // not null
   superMeta Int // not null
   desafio Int // not null
   peso Float // not null
-  resultado Float
-  notaIndicador Float
+  resultado Float?
+  notaIndicador Float?
 
   // FK para colaborador
   idColaborador String
