@@ -39,7 +39,7 @@ model Colaborador {
 
   // FK pra gestor
   idGestor String
-  gestor Gestor @relation(fields: [idGestor], references: [id])
+  gestor Gestor @relation(fields: [idGestor], references: [id], onUpdate: Cascade, onDelete: Cascade)
 }
 
 
@@ -54,7 +54,7 @@ model Indicador {
   
   //FK pra gestor
   idGestor String
-  gestor Gestor @relation(fields: [idGestor], references: [id])
+  gestor Gestor @relation(fields: [idGestor], references: [id], onUpdate: Cascade, onDelete: Cascade)
 }
 
 model NotaMensalColaborador {
@@ -64,7 +64,7 @@ model NotaMensalColaborador {
   
   // FK pra Colaborador
   idColaborador String
-  colaborador Colaborador @relation(fields: [idColaborador], references: [id])
+  colaborador Colaborador @relation(fields: [idColaborador], references: [id], onUpdate: Cascade, onDelete: Cascade)
 }
 
 
@@ -81,9 +81,9 @@ model ColaboradorIndicador {
 
   // FK para colaborador
   idColaborador String
-  colaborador Colaborador @relation(fields:[idColaborador], references: [id])
+  colaborador Colaborador @relation(fields:[idColaborador], references: [id], onUpdate: Cascade, onDelete: Cascade)
   
   // FK para indicador
   idIndicador String
-  indicador Indicador @relation(fields:[idIndicador], references: [id])
+  indicador Indicador @relation(fields:[idIndicador], references: [id], onUpdate: Cascade, onDelete: Cascade)
 }
