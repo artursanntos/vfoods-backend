@@ -7,11 +7,12 @@ export class IndicadorService {
 
     constructor(private prisma: PrismaService) {}
 
-    existe (nomeInd: string){
-        //caso possa ter mais de um indicador -> fazer ajuste aqui
+    existe (nomeInd: string,idGestor: string){
+        
         return this.prisma.indicador.findFirst({
           where: {
-            nome: nomeInd
+            nome: nomeInd,
+            idGestor: idGestor
           }
         })
       }
@@ -20,7 +21,7 @@ export class IndicadorService {
 
         //verificando se indicador já existe
        
-        const indicadorExiste = await this.existe(data.nome);
+        const indicadorExiste = await this.existe(data.nome, data.idGestor);
     
         if (indicadorExiste) {
           throw new Error('Não é possível criar o mesmo indicador.')
@@ -35,8 +36,8 @@ export class IndicadorService {
         return indicador;
       }
 
-    async findOne(nomeInd: string) {
-        const indicadorExiste = await this.existe(nomeInd);
+    async findOne(nomeInd: string, idGestor: string) {
+        const indicadorExiste = await this.existe(nomeInd, idGestor);
     
         if (!indicadorExiste) {
           throw new Error('Não é possível encontrar um indicador que NÃO EXISTE.')
@@ -45,32 +46,17 @@ export class IndicadorService {
         return indicadorExiste;
       }
 
-    async findAllIndOfGest(emailGest: string){
-        //por estar utilizando o gestor, taalvez essa fosse uma func de gestor.service
-        //a menos que use o id de gestor ao inves do email
-        
-        //verificando se gestor existe
-        const gestorExiste = await this.prisma.gestor.findFirst({
-            where: {
-              email: emailGest
-            }
-        })
-
-        if (!gestorExiste) {
-            throw new Error('Não é possível localizar indicadores de um gestor que NÃO EXISTE.')
-        }
-
-        const id = gestorExiste.id;
+    async findAllIndOfGest(idGestor: string){
 
         return this.prisma.indicador.findMany({
               where: {
-                  idGestor: id
+                  idGestor: idGestor
               }
         })
     }
 
-    async remove(nome: string) {
-        const indicadorExiste = await this.existe(nome);
+    async remove(nomeInd: string, idGestor: string) {
+        const indicadorExiste = await this.existe(nomeInd, idGestor);
 
         if (!indicadorExiste) {
           throw new Error('Não é possível remover um indicador que NÃO EXISTE.')
@@ -86,8 +72,8 @@ export class IndicadorService {
     
     }
 
-    async update(nome: string, data: IndicadorDto) {
-      const indicadorExiste = await this.existe(data.nome);
+    async update(nomeInd: string, idGestor:string, data: IndicadorDto) {
+      const indicadorExiste = await this.existe(nomeInd,idGestor);
   
       if (!indicadorExiste) {
         throw new Error('Não é possível atualizar um indicador que NÃO EXISTE.')

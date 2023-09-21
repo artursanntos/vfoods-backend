@@ -13,26 +13,26 @@ export class IndicadorController {
     }
 
     //pegar indicador      
-    @Get(':nomeInd')//atencao: pode haver mais de um indicador com msm nome e com dead line dif?
-    async findOne(@Param('nomeInd') nomeInd: string) {
-      return this.indicadorService.findOne(nomeInd);
+    @Get(':idGestor/:nomeInd')
+    async findOne(@Param('nomeInd') nomeInd: string,@Param('idGestor') idGestor: string) {
+      return this.indicadorService.findOne(nomeInd,idGestor);
     }
 
     //pegar todos indicadores de um gestor
-    @Get('/indicadoresDoGestor/:emailGest')
-    async findAllColFromOne(@Param('emailGest') emailGest: string) {
-      return this.indicadorService.findAllIndOfGest(emailGest);
+    @Get('/:idGestor')
+    async findAllColFromOne(@Param('idGestor') idGestor: string) {
+      return this.indicadorService.findAllIndOfGest(idGestor);
     }
 
     //excluir indicador
-    @Delete(':nomeInd')
-    async remove(@Param('nomeInd') nomeInd: string) {
-      return this.indicadorService.remove(nomeInd);
+    @Delete(':idGestor/:nomeInd')
+    async remove(@Param('nomeInd') nomeInd: string,@Param('idGestor') idGestor: string) {
+      return this.indicadorService.remove(nomeInd,idGestor);
     }
 
-    @Put(":nome")
-    async update(@Param("nome") nome:string, @Body() data:IndicadorDto) {
-      return this.indicadorService.update(nome, data);
+    @Put(":idGestor/:nomeInd")
+    async update(@Param('nomeInd') nomeInd: string,@Param('idGestor') idGestor: string, @Body() data:IndicadorDto) {
+      return this.indicadorService.update(nomeInd, idGestor, data);
     }
 
 }
