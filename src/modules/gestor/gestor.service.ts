@@ -7,10 +7,10 @@ export class GestorService {
 
     constructor(private prisma: PrismaService) {}
 
-    existe (nome: string){
+    existe (email: string){
         return this.prisma.gestor.findFirst({
           where: {
-            nome: nome
+            email: email
           }
         })
       }
@@ -19,7 +19,7 @@ export class GestorService {
 
         //verificando se gestor já existe
        
-        const gestorExiste = await this.existe(data.nome);
+        const gestorExiste = await this.existe(data.email);
     
         if (gestorExiste) {
           throw new Error('Não é possível criar o mesmo gestor.')
@@ -34,8 +34,8 @@ export class GestorService {
         return gestor;
       }
 
-    async findOne(nome: string) {
-        const gestorExiste = await this.existe(nome);
+    async findOne(email: string) {
+        const gestorExiste = await this.existe(email);
     
         if (!gestorExiste) {
           throw new Error('Não é possível encontrar um gestor que NÃO EXISTE.')
@@ -44,8 +44,8 @@ export class GestorService {
         return gestorExiste;
       }
 
-    async remove(nome: string) {
-        const gestorExiste = await this.existe(nome);
+    async remove(email: string) {
+        const gestorExiste = await this.existe(email);
 
         if (!gestorExiste) {
           throw new Error('Não é possível remover um gestor que NÃO EXISTE.')
@@ -61,8 +61,8 @@ export class GestorService {
     
       }
       //dar mais atencao nos testes
-    async findAllColFromOne (nome: string){
-        const gestorExiste = await this.existe(nome);
+    async findAllColFromOne (email: string){
+        const gestorExiste = await this.existe(email);
 
         if (!gestorExiste) {
           throw new Error('Não é localizar colaboradores de um gestor que NÃO EXISTE.')

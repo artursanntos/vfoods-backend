@@ -13,21 +13,21 @@ export class GestorController {
     }
 
     //pegar gestor
-    @Get(':nome')
-    async findOne(@Param('nome') nome: string) {
-      return this.gestorService.findOne(nome);
+    @Get(':email')
+    async findOne(@Param('email') email: string) {
+      return this.gestorService.findOne(email);
     }
 
     //excluir gestor
-    @Delete(':nome')
-    async remove(@Param('nome') nome: string) {
-      return this.gestorService.remove(nome);
+    @Delete(':email')
+    async remove(@Param('email') email: string) {
+      return this.gestorService.remove(email);
     }
 
     //pegar colaboradores do gestor
-    @Get('/colaboradores/:nome')
-    async findAllColFromOne(@Param('nome') nome: string) {
-      return this.gestorService.findAllColFromOne(nome);
+    @Get('/colaboradores/:email')
+    async findAllColFromOne(@Param('email') email: string) {
+      return this.gestorService.findAllColFromOne(email);
     }
 
 }
