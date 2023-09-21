@@ -86,4 +86,23 @@ export class IndicadorService {
     
     }
 
+    async update(nome: string, data: IndicadorDto) {
+      const indicadorExiste = await this.existe(data.nome);
+  
+      if (!indicadorExiste) {
+        throw new Error('Não é possível atualizar um indicador que NÃO EXISTE.')
+      }
+      
+      const id = indicadorExiste.id;
+
+      return await this.prisma.indicador.update({
+        data,
+        where: { 
+          id,
+         },
+      })
+  
+      
+    }
+
 }

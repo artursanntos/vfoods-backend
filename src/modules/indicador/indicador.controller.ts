@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { IndicadorService } from './indicador.service';
 import { IndicadorDto } from './dto/indicador.dto';
 
@@ -28,6 +28,11 @@ export class IndicadorController {
     @Delete(':nomeInd')
     async remove(@Param('nomeInd') nomeInd: string) {
       return this.indicadorService.remove(nomeInd);
+    }
+
+    @Put(":nome")
+    async update(@Param("nome") nome:string, @Body() data:IndicadorDto) {
+      return this.indicadorService.update(nome, data);
     }
 
 }
