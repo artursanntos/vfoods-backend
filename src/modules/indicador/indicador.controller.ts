@@ -30,6 +30,7 @@ export class IndicadorController {
       return this.indicadorService.remove(nomeInd,idGestor);
     }
 
+    //updade indicador
     @Put(":idGestor/:nomeInd")
     async update(@Param('nomeInd') nomeInd: string,@Param('idGestor') idGestor: string, @Body() data:IndicadorDto) {
       return this.indicadorService.update(nomeInd, idGestor, data);
