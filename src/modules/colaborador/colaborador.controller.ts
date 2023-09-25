@@ -26,7 +26,7 @@ export class ColaboradorController {
 
     // pegar colaborador
     @Get(':id')
-    async findOne(@Body() id: string) {
+    async findOne(@Param('id') id: string) {
       return this.colaboradorService.findOne(id);
     }
 
