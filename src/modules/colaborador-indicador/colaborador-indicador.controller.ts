@@ -1,5 +1,93 @@
-import { Controller } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  NotFoundException,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
+import { CriarColaboradorIndicadorDto } from './dto/criar-colaborador-indicador.dto';
+import { UpdateColaboradorIndicadorDto } from './dto/update-colaborador-indicador.dto';
 
 @Controller()
 export class ColaboradorIndicadorController {
+  constructor(private readonly colaboradorIndicadorService) {}
+
+  @Post()
+  create(@Body() createColaboradorIndicadorDto: CriarColaboradorIndicadorDto) {
+    return this.colaboradorIndicadorService.create(
+      createColaboradorIndicadorDto,
+    );
+  }
+
+  @Patch(':idColaboradorIndicador')
+  async updateColaboradorIndicador(
+    @Param('idColaboradorIndicador') id: string,
+    @Body() updateColaboradorIndicadorDto: UpdateColaboradorIndicadorDto,
+  ) {
+    const updatedColaboradorIndicador =
+      await this.colaboradorIndicadorService.update(
+        id,
+        updateColaboradorIndicadorDto,
+      );
+
+    if (!updatedColaboradorIndicador) {
+      throw new NotFoundException('ColaboradorIndicador not found');
+    }
+
+    return {
+      message: 'ColaboradorIndicador updated successfully',
+      updatedColaboradorIndicador,
+    };
+  }
+
+  @Delete(':idColaboradorIndicador')
+  async deleteColaboradorIndicador(
+    @Param('idColaboradorIndicador') id: string,
+  ) {
+    const deletedColaboradorIndicador =
+      await this.colaboradorIndicadorService.remove(id);
+    if (!deletedColaboradorIndicador) {
+      throw new NotFoundException('ColaboradorIndicador not found');
+    }
+    return { message: 'ColaboradorIndicador deleted successfully' };
+  }
+
+  @Get(':idColaboradorIndicador')
+  async findOne(@Param('idColaboradorIndicador') id: string) {
+    const colaboradorIndicador =
+      await this.colaboradorIndicadorService.findOne(id);
+    if (!colaboradorIndicador) {
+      throw new NotFoundException('ColaboradorIndicador not found');
+    }
+    return { colaboradorIndicador };
+  }
+
+  @Get(':idColaborador')
+  async findAllOfColaborator(@Param('idColaborador') id: string) {
+    const colaboradorIndicadores =
+      await this.colaboradorIndicadorService.findAllOfColaborator(id);
+    if (!colaboradorIndicadores) {
+      throw new NotFoundException('ColaboradorIndicadores not found');
+    }
+    return { colaboradorIndicadores };
+  }
+
+  @Get(':idColaborador')
+  async findAllOfColaboratorByMonth(
+    @Param('idColaborador') id: string,
+    @Param('mes') mes: Date,
+  ) {
+    const colaboradorIndicadores =
+      await this.colaboradorIndicadorService.findAllOfColaboratorByMonth(
+        id,
+        mes,
+      );
+    if (!colaboradorIndicadores) {
+      throw new NotFoundException('ColaboradorIndicadores not found');
+    }
+    return { colaboradorIndicadores };
+  }
 }

@@ -1,4 +1,4 @@
-import { IsDate, IsNotEmpty, IsNumber, isDate, isNotEmpty } from "class-validator"
+import { IsDate, IsNotEmpty, IsNumber, IsString, isDate, isNotEmpty } from "class-validator"
 
 export class CriarColaboradorIndicadorDto {
     @IsDate()
@@ -26,4 +26,10 @@ export class CriarColaboradorIndicadorDto {
 
     @IsNumber()
     notaIndicador: number;
+
+    @IsString()
+    idColaborador: string;
+
+    @IsString()
+    idIndicador: string;
 }
