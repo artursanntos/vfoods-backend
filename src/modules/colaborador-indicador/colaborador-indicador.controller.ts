@@ -12,7 +12,7 @@ import { CriarColaboradorIndicadorDto } from './dto/criar-colaborador-indicador.
 import { UpdateColaboradorIndicadorDto } from './dto/update-colaborador-indicador.dto';
 import { ColaboradorIndicadorService } from './colaborador-indicador.service';
 
-@Controller()
+@Controller('colaborador-indicador')
 export class ColaboradorIndicadorController {
   constructor(
     private readonly colaboradorIndicadorService: ColaboradorIndicadorService,
@@ -68,7 +68,7 @@ export class ColaboradorIndicadorController {
     return { colaboradorIndicador };
   }
 
-  @Get(':idColaborador')
+  @Get('/findAllOfColaborator/:idColaborador')
   async findAllOfColaborator(@Param('idColaborador') id: string) {
     const colaboradorIndicadores =
       await this.colaboradorIndicadorService.findAllOfColaborator(id);
@@ -78,7 +78,7 @@ export class ColaboradorIndicadorController {
     return { colaboradorIndicadores };
   }
 
-  @Get(':idColaborador')
+  @Get('/findAllOfColaboratorByMonth/:idColaborador/:mes')
   async findAllOfColaboratorByMonth(
     @Param('idColaborador') id: string,
     @Param('mes') mes: Date,
