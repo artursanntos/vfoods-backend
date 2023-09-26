@@ -10,10 +10,13 @@ import {
 } from '@nestjs/common';
 import { CriarColaboradorIndicadorDto } from './dto/criar-colaborador-indicador.dto';
 import { UpdateColaboradorIndicadorDto } from './dto/update-colaborador-indicador.dto';
+import { ColaboradorIndicadorService } from './colaborador-indicador.service';
 
 @Controller()
 export class ColaboradorIndicadorController {
-  constructor(private readonly colaboradorIndicadorService) {}
+  constructor(
+    private readonly colaboradorIndicadorService: ColaboradorIndicadorService,
+  ) {}
 
   @Post()
   create(@Body() createColaboradorIndicadorDto: CriarColaboradorIndicadorDto) {
