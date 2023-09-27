@@ -14,10 +14,9 @@ CREATE TABLE "Colaborador" (
     "nome" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "telefone" TEXT NOT NULL,
+    "senha" TEXT NOT NULL,
     "cargo" TEXT,
     "data_admissao" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "endereco" TEXT,
-    "cep" TEXT,
     "imagem" TEXT,
     "idGestor" TEXT NOT NULL,
     CONSTRAINT "Colaborador_idGestor_fkey" FOREIGN KEY ("idGestor") REFERENCES "Gestor" ("id") ON DELETE CASCADE ON UPDATE CASCADE
