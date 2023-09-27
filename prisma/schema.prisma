@@ -7,83 +7,74 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
-
 model Gestor {
-  id  String @id @default(uuid())
-  nome String
+  id     String  @id @default(uuid())
+  nome   String
   imagem String?
-  email String @unique
-  area String
-  senha String   
-  
+  email  String  @unique
+  area   String
+  senha  String
+
   colaboradores Colaborador[]
-  indicadores Indicador[]
+  indicadores   Indicador[]
 }
 
-
-
 model Colaborador {
-  id  String @id @default(uuid())
-  nome  String // not null
-  email String @unique // not null
-  telefone  String @unique // not null
-  cargo String?
+  id            String   @id @default(uuid())
+  nome          String // not null
+  email         String   @unique // not null
+  telefone      String   @unique // not null
+  senha         String //not null
+  cargo         String?
   data_admissao DateTime @default(now())
-  endereco  String?
-  cep String?
-  imagem  String?
+  imagem        String?
 
   colaboradorIndicadores ColaboradorIndicador[]
-  notasMensais NotaMensalColaborador[]
+  notasMensais           NotaMensalColaborador[]
 
   // FK pra gestor
   idGestor String
-  gestor Gestor @relation(fields: [idGestor], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  gestor   Gestor @relation(fields: [idGestor], references: [id], onUpdate: Cascade, onDelete: Cascade)
 }
 
-
-
 model Indicador {
-  id String @id @default(uuid())
-  nome String // not null
-  unidade_medida String // not null
-  data_deadline DateTime // not null
-  descricao String?
+  id                     String                 @id @default(uuid())
+  nome                   String // not null
+  unidade_medida         String // not null
+  data_deadline          DateTime // not null
+  descricao              String?
   colaboradorIndicadores ColaboradorIndicador[]
-  
+
   //FK pra gestor
   idGestor String
-  gestor Gestor @relation(fields: [idGestor], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  gestor   Gestor @relation(fields: [idGestor], references: [id], onUpdate: Cascade, onDelete: Cascade)
 }
 
 model NotaMensalColaborador {
-  id String @id @default(uuid())
-  mesAno DateTime
+  id         String   @id @default(uuid())
+  mesAno     DateTime
   notaMensal Float?
-  
+
   // FK pra Colaborador
   idColaborador String
-  colaborador Colaborador @relation(fields: [idColaborador], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  colaborador   Colaborador @relation(fields: [idColaborador], references: [id], onUpdate: Cascade, onDelete: Cascade)
 }
 
-
-
 model ColaboradorIndicador {
-  id String @id @default(uuid())
-  mes_ano DateTime // not null
-  meta Int // not null
-  superMeta Int // not null
-  desafio Int // not null
-  peso Float // not null
-  resultado Float?
+  id            String   @id @default(uuid())
+  mes_ano       DateTime // not null
+  meta          Int // not null
+  superMeta     Int // not null
+  desafio       Int // not null
+  peso          Float // not null
+  resultado     Float?
   notaIndicador Float?
 
   // FK para colaborador
   idColaborador String
-  colaborador Colaborador @relation(fields:[idColaborador], references: [id], onUpdate: Cascade, onDelete: Cascade)
-  
+  colaborador   Colaborador @relation(fields: [idColaborador], references: [id], onUpdate: Cascade, onDelete: Cascade)
+
   // FK para indicador
   idIndicador String
-  indicador Indicador @relation(fields:[idIndicador], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  indicador   Indicador @relation(fields: [idIndicador], references: [id], onUpdate: Cascade, onDelete: Cascade)
 }
