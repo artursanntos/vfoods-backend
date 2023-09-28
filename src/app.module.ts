@@ -7,6 +7,7 @@ import { ColaboradorIndicadorModule } from './modules/colaborador-indicador/cola
 import { GestorModule } from './modules/gestor/gestor.module';
 import { IndicadorModule } from './modules/indicador/indicador.module';
 import { NotaMensalModule } from './modules/nota-mensal/nota-mensal.module';
+import { MetasMesIndicadorModule } from './modules/metasMesIndicador/metas-mes-indicador.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { NotaMensalModule } from './modules/nota-mensal/nota-mensal.module';
     GestorModule,
     IndicadorModule,
     NotaMensalModule,
+    MetasMesIndicadorModule
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],
