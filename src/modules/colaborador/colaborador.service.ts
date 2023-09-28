@@ -73,6 +73,16 @@ export class ColaboradorService {
 
         return colaboradorExists;
     }
+
+    async findOneByEmail(email: string): Promise<ColaboradorDTO> {
+        const colaboradorExists = await this.emailExiste(email);
+
+        if (!colaboradorExists) {
+            throw new Error('Colaborador com email fornecido não foi encontrado.')
+        }
+
+        return colaboradorExists;
+    }
     
     async findAll() {
         return this.prisma.colaborador.findMany();

@@ -24,10 +24,16 @@ export class ColaboradorController {
         return this.colaboradorService.update(id, data);
     }
 
-    // pegar colaborador
+    // pegar colaborador por Id
     @Get(':id')
     async findOne(@Param('id') id: string) {
       return this.colaboradorService.findOne(id);
+    }
+
+    // pegar colaborador por email
+    @Get('findByEmail/:email')
+    async findOneByEmail(@Param('email') email: string) {
+      return this.colaboradorService.findOneByEmail(email);
     }
 
     // pegar todos os colaboradores
