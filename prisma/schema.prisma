@@ -44,6 +44,7 @@ model Indicador {
   data_deadline          DateTime // not null
   descricao              String?
   colaboradorIndicadores ColaboradorIndicador[]
+  metasMesIndicador      MetasMesIndicador[]
 
   //FK pra gestor
   idGestor String
@@ -73,6 +74,19 @@ model ColaboradorIndicador {
   // FK para colaborador
   idColaborador String
   colaborador   Colaborador @relation(fields: [idColaborador], references: [id], onUpdate: Cascade, onDelete: Cascade)
+
+  // FK para indicador
+  idIndicador String
+  indicador   Indicador @relation(fields: [idIndicador], references: [id], onUpdate: Cascade, onDelete: Cascade)
+}
+
+model MetasMesIndicador {
+  id                            String   @id @default(uuid())
+  mes_ano                       DateTime // not null
+  totalColabBateramMeta         Int 
+  totalColabBateramSuperMeta    Int 
+  totalColabBateramDesafio      Int 
+  totalColab                    Int
 
   // FK para indicador
   idIndicador String
