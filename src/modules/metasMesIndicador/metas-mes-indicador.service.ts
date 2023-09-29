@@ -59,6 +59,17 @@ export class MetasMesIndicadorService {
         return mmiExiste;
     }
 
+    async findAllMeses(idIndicador: string) {
+      
+      const mmi = await this.prisma.metasMesIndicador.findMany({
+        where: {
+          idIndicador: idIndicador
+      }
+      })
+  
+      return mmi;
+  }
+
     async update(idIndicador: string, mes: string, ano: string, data: MetasMesIndicadorDto) {
         const mmiExiste = await this.existeMes_Ano(idIndicador, mes, ano);
     
