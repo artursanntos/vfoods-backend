@@ -20,6 +20,12 @@ export class MetasMesIndicadorController {
       return this.metasMesIndicadorService.findOne(idIndicador, mes, ano);
     }
 
+    //pegar mmi
+    @Get(':idIndicador')
+    async findAllMeses(@Param('idIndicador') idIndicador: string) {
+      return this.metasMesIndicadorService.findAllMeses(idIndicador);
+    }
+
     //updade mmi
     @Put(':idIndicador/:mes/:ano')
     async update(@Param('idIndicador') idIndicador: string, @Param('mes') mes: string, @Param('ano') ano: string, @Body() data:MetasMesIndicadorDto) {
