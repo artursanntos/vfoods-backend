@@ -66,8 +66,20 @@ export class MetasMesIndicadorService {
           idIndicador: idIndicador
       }
       })
+
+      var meses:Date[]=[];
+      var metas:number[]=[];
+      var superMetas:number[]=[];
+      var desafio:number[]=[];
+
+      mmi.forEach(element => {
+        meses.push(element.mes_ano);
+        metas.push(element.totalColabBateramMeta);
+        superMetas.push(element.totalColabBateramSuperMeta);
+        desafio.push(element.totalColabBateramDesafio);
+      });
   
-      return mmi;
+      return [meses,metas,superMetas,desafio];
   }
 
     async update(idIndicador: string, mes: string, ano: string, data: MetasMesIndicadorDto) {
