@@ -50,7 +50,7 @@ export class ColaboradorIndicadorService {
 
   async findAllOfColaboratorByMonth(
     idColaborador: string,
-    mes: Date,
+    mes: string,
   ): Promise<ColaboradorIndicador[]> {
     return this.prisma.colaboradorIndicador.findMany({
       where: {

@@ -81,7 +81,7 @@ export class ColaboradorIndicadorController {
   @Get('/findAllOfColaboratorByMonth/:idColaborador/:mes')
   async findAllOfColaboratorByMonth(
     @Param('idColaborador') id: string,
-    @Param('mes') mes: Date,
+    @Param('mes') mes: string,
   ) {
     const colaboradorIndicadores =
       await this.colaboradorIndicadorService.findAllOfColaboratorByMonth(
