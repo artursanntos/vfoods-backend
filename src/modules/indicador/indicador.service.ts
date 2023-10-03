@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/database/prisma.service';
 import { IndicadorDto } from './dto/indicador.dto';
+import { Indicador } from '@prisma/client';
+import { log } from 'console';
 
 @Injectable()
 export class IndicadorService {
@@ -45,6 +47,19 @@ export class IndicadorService {
     
         return indicadorExiste;
       }
+
+    async findOneById(id: string) {
+      const indicador = this.prisma.indicador.findFirst({
+        where:{
+          id: id
+        }
+      })
+
+      if (!indicador) {
+        throw new Error('Não é possível encontrar um indicador que NÃO EXISTE.')
+      }
+      return indicador;
+    }
 
     async findAllIndOfGest(idGestor: string){
 
