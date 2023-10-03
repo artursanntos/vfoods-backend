@@ -18,6 +18,12 @@ export class IndicadorController {
       return this.indicadorService.findOne(nomeInd,idGestor);
     }
 
+    // pegar indicador por id
+    @Get('info/byId/:id')
+    async findOneById(@Param('id') id: string) {
+      return this.indicadorService.findOneById(id);
+    }
+
     //pegar todos indicadores de um gestor
     @Get('/:idGestor')
     async findAllColFromOne(@Param('idGestor') idGestor: string) {
@@ -30,7 +36,7 @@ export class IndicadorController {
       return this.indicadorService.remove(nomeInd,idGestor);
     }
 
-    //updade indicador
+    //update indicador
     @Put(":idGestor/:nomeInd")
     async update(@Param('nomeInd') nomeInd: string,@Param('idGestor') idGestor: string, @Body() data:IndicadorDto) {
       return this.indicadorService.update(nomeInd, idGestor, data);
