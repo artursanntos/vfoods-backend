@@ -1,9 +1,9 @@
 import { IsDate, IsNotEmpty, IsNumber, IsString, isDate, isNotEmpty } from "class-validator"
 
 export class CriarColaboradorIndicadorDto {
-    @IsDate()
+    
     @IsNotEmpty()
-    mes_ano: Date;
+    mes_ano: string;
 
     @IsNumber()
     @IsNotEmpty()
