@@ -139,7 +139,7 @@ export class ColaboradorIndicadorService {
 
     const promises = last6Mounths.map(async (data) => {
       const aux = await this.getPercentualDeMetasBatidasPorMes(idColaborador, data);
-      console.log(aux);
+      
       return aux;
     });
 
