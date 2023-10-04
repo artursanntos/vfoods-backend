@@ -106,25 +106,37 @@ export class MetasMesIndicadorService {
     const mesesParaAnalise = this.findLastXMonths (mes_ano, intervalo);
 
 
-      const mmi = await this.prisma.metasMesIndicador.findMany({
-        where: {
-          mes_ano:{
-            in: mesesParaAnalise
-          } 
-      }
-      })
-
       var meses:Date[]=[];
       var metas:number[]=[];
       var superMetas:number[]=[];
       var desafio:number[]=[];
+      // é necessário o mmi de mais de um indicador para testar com segurança
+      
+      const promises = mesesParaAnalise.map(async (data) => {
+        const mmi = await this.prisma.metasMesIndicador.findMany({
+          where: {
+            mes_ano: data
+        }
+        })
+        
+        meses.push(mmi[0].mes_ano);
+        var sumMetas=0;
+        var sumSuperMetas=0;
+        var sumDesafio=0;
 
-      mmi.forEach(element => {
-        meses.push(element.mes_ano);
-        metas.push(element.totalColabBateramMeta);
-        superMetas.push(element.totalColabBateramSuperMeta);
-        desafio.push(element.totalColabBateramDesafio);
+        mmi.forEach(element => {
+           sumMetas+=element.totalColabBateramMeta;
+           sumSuperMetas+=element.totalColabBateramSuperMeta;
+           sumDesafio+=element.totalColabBateramDesafio;
+          
+        });
+        metas.push(sumMetas);
+        superMetas.push(sumSuperMetas);
+        desafio.push(sumDesafio);
+        
       });
+       
+      await Promise.all(promises)
   
       return [meses,metas,superMetas,desafio];
   }
@@ -153,7 +165,7 @@ export class MetasMesIndicadorService {
           }
           
         }
-        console.log(last6Months)
+        
         return last6Months;
     
       }
