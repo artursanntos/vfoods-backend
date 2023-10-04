@@ -93,4 +93,13 @@ export class ColaboradorIndicadorController {
     }
     return { colaboradorIndicadores };
   }
+
+  @Get('/getPercentualDeMetasBatidasLast6Mounths/:idColaborador/:date')
+  async getPercentualDeMetasBatidasLast6Mounths(
+    @Param('idColaborador') id: string,
+    @Param('date') date: string,
+  ) {
+    return await this.colaboradorIndicadorService.getPercentualDeMetasBatidasLast6Mounths(id, date);
+  }
+
 }
