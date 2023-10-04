@@ -48,6 +48,14 @@ export class ColaboradorIndicadorService {
     });
   }
 
+  async findAllOfIndicator(
+    idIndicador: string,
+  ): Promise<ColaboradorIndicador[]> {
+    return this.prisma.colaboradorIndicador.findMany({
+      where: { idIndicador },
+    });
+  }
+
   async findAllOfColaboratorByMonth(
     idColaborador: string,
     mes: string,
