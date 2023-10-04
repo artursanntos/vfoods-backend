@@ -101,6 +101,61 @@ export class MetasMesIndicadorService {
         
     }
 
+    async findAllByInterval(mes_ano: string, intervalo: number) {
+      
+    const mesesParaAnalise = this.findLastXMonths (mes_ano, intervalo);
+
+
+      const mmi = await this.prisma.metasMesIndicador.findMany({
+        where: {
+          mes_ano:{
+            in: mesesParaAnalise
+          } 
+      }
+      })
+
+      var meses:Date[]=[];
+      var metas:number[]=[];
+      var superMetas:number[]=[];
+      var desafio:number[]=[];
+
+      mmi.forEach(element => {
+        meses.push(element.mes_ano);
+        metas.push(element.totalColabBateramMeta);
+        superMetas.push(element.totalColabBateramSuperMeta);
+        desafio.push(element.totalColabBateramDesafio);
+      });
+  
+      return [meses,metas,superMetas,desafio];
+  }
+
+
+  findLastXMonths (mes_ano: string, x: number): string[] {
+    //exemplo de representacao na requisicao: "2020-03-01T00:00:00.000Z"
+        var ano = parseInt(mes_ano.substring(0, 5));
+        var mes = parseInt(mes_ano.substring(5, 8));
     
+        const complementoData = mes_ano.substring(7);
+    
+        const last6Months: string[] = [mes_ano];
+    
+        for (let index = 0; index < (x-1); index++) {
+          if (mes===1) {
+            mes=13;
+            ano--;
+          }
+    
+          mes--;
+          if (mes<10) {
+            last6Months.push(ano+'-0'+mes+complementoData);
+          }else{
+            last6Months.push(ano+'-'+mes+complementoData);
+          }
+          
+        }
+        console.log(last6Months)
+        return last6Months;
+    
+      }
 
 }
