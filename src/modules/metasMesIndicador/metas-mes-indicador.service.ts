@@ -113,27 +113,31 @@ export class MetasMesIndicadorService {
       // é necessário o mmi de mais de um indicador para testar com segurança
       
       const promises = mesesParaAnalise.map(async (data) => {
+        //quando o mes não exite, isso aqui retorna vazio
         const mmi = await this.prisma.metasMesIndicador.findMany({
           where: {
             mes_ano: data
         }
         })
-        
-        meses.push(mmi[0].mes_ano);
-        var sumMetas=0;
-        var sumSuperMetas=0;
-        var sumDesafio=0;
-
-        mmi.forEach(element => {
-           sumMetas+=element.totalColabBateramMeta;
-           sumSuperMetas+=element.totalColabBateramSuperMeta;
-           sumDesafio+=element.totalColabBateramDesafio;
+        //nesse push da problema, pq mmi é undifined
+        if (mmi[0]!== undefined) {
           
-        });
-        metas.push(sumMetas);
-        superMetas.push(sumSuperMetas);
-        desafio.push(sumDesafio);
         
+          meses.push(mmi[0].mes_ano);
+          var sumMetas=0;
+          var sumSuperMetas=0;
+          var sumDesafio=0;
+
+          mmi.forEach(element => {
+            sumMetas+=element.totalColabBateramMeta;
+            sumSuperMetas+=element.totalColabBateramSuperMeta;
+            sumDesafio+=element.totalColabBateramDesafio;
+            
+          });
+          metas.push(sumMetas);
+          superMetas.push(sumSuperMetas);
+          desafio.push(sumDesafio);
+        }
       });
        
       await Promise.all(promises)
