@@ -56,6 +56,18 @@ export class ColaboradorIndicadorService {
     });
   }
 
+  async findAllOfIndicatorByMonth(
+    idIndicador: string,
+    mes: string,
+  ): Promise<ColaboradorIndicador[]> {
+    return this.prisma.colaboradorIndicador.findMany({
+      where: {
+        idIndicador: idIndicador,
+        mes_ano: mes,
+      },
+    });
+  }
+
   async findAllOfColaboratorByMonth(
     idColaborador: string,
     mes: string,
