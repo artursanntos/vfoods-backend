@@ -78,6 +78,16 @@ export class ColaboradorIndicadorController {
     return { colaboradorIndicadores };
   }
 
+  @Get('/findAllOfIndicator/:idIndicador')
+  async findAllOfIndicator(@Param('idIndicador') id: string) {
+    const colaboradorIndicadores =
+      await this.colaboradorIndicadorService.findAllOfIndicator(id);
+    if (!colaboradorIndicadores) {
+      throw new NotFoundException('ColaboradorIndicadores not found');
+    }
+    return { colaboradorIndicadores };
+  }
+
   @Get('/findAllOfColaboratorByMonth/:idColaborador/:mes')
   async findAllOfColaboratorByMonth(
     @Param('idColaborador') id: string,
