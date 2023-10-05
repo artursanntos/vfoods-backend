@@ -70,7 +70,11 @@ export class ColaboradorIndicadorService {
     var ano = parseInt(mes_ano.substring(0, 5));
     var mes = parseInt(mes_ano.substring(5, 8));
 
-    const metaSmetaDesafio:number[]=[0,0,0, ano, mes];
+    const metaSmetaDesafio:number[]=[
+      0, //numMetasBatidas
+      0, //numSuperMetasBatidas 
+      0, //numDesafiosBatidos
+      ano, mes];
 
     todosColabIndByMonth.forEach(colabInd => {
       if (colabInd.resultado >= colabInd.desafio) {
@@ -78,10 +82,10 @@ export class ColaboradorIndicadorService {
         metaSmetaDesafio[1]++;
         metaSmetaDesafio[2]++;
       } else if (colabInd.resultado >= colabInd.superMeta) {
-        metaSmetaDesafio[0]=+1;
-        metaSmetaDesafio[1]=+1;
+        metaSmetaDesafio[0]++;
+        metaSmetaDesafio[1]++;
       } else if (colabInd.resultado >= colabInd.meta) {
-        metaSmetaDesafio[0]=+1;
+        metaSmetaDesafio[0]++;
       }
     });
 
@@ -89,63 +93,71 @@ export class ColaboradorIndicadorService {
       metaSmetaDesafio[0]/totalIndicadoresNoMes,
       metaSmetaDesafio[1]/totalIndicadoresNoMes,
       metaSmetaDesafio[2]/totalIndicadoresNoMes,
+      metaSmetaDesafio[3],
+      metaSmetaDesafio[4]
     ]
 
     return pescentualMetaSmetaDesafio;
     
   }
 
-  findLast6Mounths (mes_ano: string): string[] {
-//exemplo de representacao na requisicao: "2020-03-01T00:00:00.000Z"
-    var ano = parseInt(mes_ano.substring(0, 5));
-    var mes = parseInt(mes_ano.substring(5, 8));
-
-    const complementoData = mes_ano.substring(7);
-
-    const last6Mounths: string[] = [mes_ano];
-
-    for (let index = 0; index < 5; index++) {
-      if (mes===1) {
-        mes=13;
-        ano--;
+  findLastXMonths (mes_ano: string, x?: number): string[] {
+    //exemplo de representacao na requisicao: "2020-03-01T00:00:00.000Z"
+        var ano = parseInt(mes_ano.substring(0, 5));
+        var mes = parseInt(mes_ano.substring(5, 8));
+        if(x === undefined){
+          x=6;
+        }
+        const complementoData = mes_ano.substring(7);
+    
+        const lastXMonths: string[] = [mes_ano];
+    
+        for (let index = 0; index < (x-1); index++) {
+          if (mes===1) {
+            mes=13;
+            ano--;
+          }
+    
+          mes--;
+          if (mes<10) {
+            lastXMonths.push(ano+'-0'+mes+complementoData);
+          }else{
+            lastXMonths.push(ano+'-'+mes+complementoData);
+          }
+          
+        }
+        
+        return lastXMonths;
+    
       }
 
-      mes--;
-      if (mes<10) {
-        last6Mounths.push(ano+'-0'+mes+complementoData);
-      }else{
-        last6Mounths.push(ano+'-'+mes+complementoData);
-      }
-      
+  async getPercentualDeMetasBatidasLastXMonths(idColaborador: string, mes_ano: string, x?: number){
+    
+    if(x === undefined){
+      x=6;
     }
 
-    return last6Mounths;
-
-  }
-
-  async getPercentualDeMetasBatidasLast6Mounths(idColaborador: string, mes_ano: string){
-
-    const last6Mounths = this.findLast6Mounths(mes_ano);
+    const lastXMonths = this.findLastXMonths(mes_ano, x);
     /*
-    const percentualDeMetasBatidasLast6Mounths:number[][] = []
+    const percentualDeMetasBatidasLast6Months:number[][] = []
 
-    last6Mounths.forEach(async data => {
+    last6Months.forEach(async data => {
       const aux = await this.getPercentualDeMetasBatidasPorMes(idColaborador, data);
       console.log(aux)
-      percentualDeMetasBatidasLast6Mounths.push(aux);
+      percentualDeMetasBatidasLast6Months.push(aux);
       
     });
     */
 
-    const promises = last6Mounths.map(async (data) => {
+    const promises = lastXMonths.map(async (data) => {
       const aux = await this.getPercentualDeMetasBatidasPorMes(idColaborador, data);
       
       return aux;
     });
 
-    const percentualDeMetasBatidasLast6Mounths = await Promise.all(promises);
+    const percentualDeMetasBatidasLast6Months = await Promise.all(promises);
 
-    return percentualDeMetasBatidasLast6Mounths;
+    return percentualDeMetasBatidasLast6Months;
   }
 
 }
