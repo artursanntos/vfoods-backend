@@ -48,6 +48,14 @@ export class ColaboradorIndicadorService {
     });
   }
 
+  async findAllOfIndicator(
+    idIndicador: string,
+  ): Promise<ColaboradorIndicador[]> {
+    return this.prisma.colaboradorIndicador.findMany({
+      where: { idIndicador },
+    });
+  }
+
   async findAllOfColaboratorByMonth(
     idColaborador: string,
     mes: string,
@@ -153,6 +161,7 @@ export class ColaboradorIndicadorService {
     
   }
 
+
   findLastXMonths (mes_ano: string, x?: number): string[] {
     //exemplo de representacao na requisicao: "2020-03-01T00:00:00.000Z"
         var ano = parseInt(mes_ano.substring(0, 5));
@@ -190,6 +199,7 @@ export class ColaboradorIndicadorService {
     }
 
     const lastXMonths = this.findLastXMonths(mes_ano, x);
+
     /*
     const percentualDeMetasBatidasLast6Months:number[][] = []
 
@@ -201,7 +211,9 @@ export class ColaboradorIndicadorService {
     });
     */
 
+
     const promises = lastXMonths.map(async (data) => {
+
       const aux = await this.getPercentualDeMetasBatidasPorMes(idColaborador, data);
       
       return aux;

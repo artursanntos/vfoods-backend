@@ -78,6 +78,16 @@ export class ColaboradorIndicadorController {
     return { colaboradorIndicadores };
   }
 
+  @Get('/findAllOfIndicator/:idIndicador')
+  async findAllOfIndicator(@Param('idIndicador') id: string) {
+    const colaboradorIndicadores =
+      await this.colaboradorIndicadorService.findAllOfIndicator(id);
+    if (!colaboradorIndicadores) {
+      throw new NotFoundException('ColaboradorIndicadores not found');
+    }
+    return { colaboradorIndicadores };
+  }
+
   @Get('/findAllOfColaboratorByMonth/:idColaborador/:mes')
   async findAllOfColaboratorByMonth(
     @Param('idColaborador') id: string,
@@ -94,6 +104,7 @@ export class ColaboradorIndicadorController {
     return { colaboradorIndicadores };
   }
 
+
   //em um unico meses
   @Get('/getPercentualDeMetasPorIndicadorPorMes/:idIndicador/:date')
   async getPercentualDeMetasPorIndicadorPorMes(
@@ -103,12 +114,15 @@ export class ColaboradorIndicadorController {
     return await this.colaboradorIndicadorService.getPercentualDeMetasPorIndicadorPorMes(id, date);
   }
 
+
   //intervalo de 6 meses
   @Get('/getPercentualDeMetasBatidasLastXMonths/:idColaborador/:date')
+
   async getPercentualDeMetasBatidasLast6Months(
     @Param('idColaborador') id: string,
     @Param('date') date: string,
   ) {
+
     return await this.colaboradorIndicadorService.getPercentualDeMetasBatidasLastXMonths(id, date);
   }
 
@@ -120,6 +134,7 @@ export class ColaboradorIndicadorController {
     @Param('interval') interval: number,
   ) {
     return await this.colaboradorIndicadorService.getPercentualDeMetasBatidasLastXMonths(id, date, interval);
+
   }
 
 }
