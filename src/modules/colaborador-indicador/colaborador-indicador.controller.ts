@@ -94,12 +94,12 @@ export class ColaboradorIndicadorController {
     return { colaboradorIndicadores };
   }
 
-  @Get('/getPercentualDeMetasBatidasLast6Mounths/:idColaborador/:date')
-  async getPercentualDeMetasBatidasLast6Mounths(
+  @Get('/getPercentualDeMetasBatidasLast6Months/:idColaborador/:date')
+  async getPercentualDeMetasBatidasLast6Months(
     @Param('idColaborador') id: string,
     @Param('date') date: string,
   ) {
-    return await this.colaboradorIndicadorService.getPercentualDeMetasBatidasLast6Mounths(id, date);
+    return await this.colaboradorIndicadorService.getPercentualDeMetasBatidasLast6Months(id, date);
   }
 
 }

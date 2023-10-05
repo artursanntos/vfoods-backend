@@ -95,14 +95,14 @@ export class ColaboradorIndicadorService {
     
   }
 
-  findLast6Mounths (mes_ano: string): string[] {
+  findLast6Months (mes_ano: string): string[] {
 //exemplo de representacao na requisicao: "2020-03-01T00:00:00.000Z"
     var ano = parseInt(mes_ano.substring(0, 5));
     var mes = parseInt(mes_ano.substring(5, 8));
 
     const complementoData = mes_ano.substring(7);
 
-    const last6Mounths: string[] = [mes_ano];
+    const last6Months: string[] = [mes_ano];
 
     for (let index = 0; index < 5; index++) {
       if (mes===1) {
@@ -112,40 +112,40 @@ export class ColaboradorIndicadorService {
 
       mes--;
       if (mes<10) {
-        last6Mounths.push(ano+'-0'+mes+complementoData);
+        last6Months.push(ano+'-0'+mes+complementoData);
       }else{
-        last6Mounths.push(ano+'-'+mes+complementoData);
+        last6Months.push(ano+'-'+mes+complementoData);
       }
       
     }
 
-    return last6Mounths;
+    return last6Months;
 
   }
 
-  async getPercentualDeMetasBatidasLast6Mounths(idColaborador: string, mes_ano: string){
+  async getPercentualDeMetasBatidasLast6Months(idColaborador: string, mes_ano: string){
 
-    const last6Mounths = this.findLast6Mounths(mes_ano);
+    const last6Months = this.findLast6Months(mes_ano);
     /*
-    const percentualDeMetasBatidasLast6Mounths:number[][] = []
+    const percentualDeMetasBatidasLast6Months:number[][] = []
 
-    last6Mounths.forEach(async data => {
+    last6Months.forEach(async data => {
       const aux = await this.getPercentualDeMetasBatidasPorMes(idColaborador, data);
       console.log(aux)
-      percentualDeMetasBatidasLast6Mounths.push(aux);
+      percentualDeMetasBatidasLast6Months.push(aux);
       
     });
     */
 
-    const promises = last6Mounths.map(async (data) => {
+    const promises = last6Months.map(async (data) => {
       const aux = await this.getPercentualDeMetasBatidasPorMes(idColaborador, data);
       
       return aux;
     });
 
-    const percentualDeMetasBatidasLast6Mounths = await Promise.all(promises);
+    const percentualDeMetasBatidasLast6Months = await Promise.all(promises);
 
-    return percentualDeMetasBatidasLast6Mounths;
+    return percentualDeMetasBatidasLast6Months;
   }
 
 }
