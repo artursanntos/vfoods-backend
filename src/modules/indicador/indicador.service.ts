@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/database/prisma.service';
 import { IndicadorDto } from './dto/indicador.dto';
-import { Indicador } from '@prisma/client';
 import { log } from 'console';
 
 @Injectable()
 export class IndicadorService {
 
     constructor(private prisma: PrismaService) {}
+    
 
     existe (nomeInd: string,idGestor: string){
         
@@ -19,48 +19,7 @@ export class IndicadorService {
         })
       }
 
-    mes_anoAtual () :string{
-      const dataAtual = new Date();
-      const anoAtual = dataAtual.getFullYear();
-      const mesAtual = dataAtual.getMonth()+1;
-      if (mesAtual < 10) {
-        return (anoAtual+'-0'+mesAtual+'-01T00:00:00.000Z');
-      }else{
-        return (anoAtual+'-'+mesAtual+'-01T00:00:00.000Z');
-      } 
-    }
 
-    listaMes_anoAteDeadLine (deadLine: string): string[] {
-      //tenho que colocar todos os mes_ano  ate a dead line em um array 
-      const mes_anoDeadLine = (deadLine.substring(0, 9))+'01T00:00:00.000Z';
-      var mes_ano = this.mes_anoAtual();
-      var chegouDead = false;
-      const meses_anos: string[] = []
-
-      while (!chegouDead){
-        if (mes_ano == mes_anoDeadLine) {
-          chegouDead=true;
-        }
-        meses_anos.push(mes_ano)
-        //prox mes e ano
-        var ano = parseInt(mes_ano.substring(0, 5));
-        var mes = parseInt(mes_ano.substring(5, 8));
-        if (mes==12) {
-          ano++;
-          mes=0;
-        }
-        mes++;
-        if (mes < 10) {
-          mes_ano = ano+'-0'+mes+'-01T00:00:00.000Z';
-        }else{
-          mes_ano = ano+'-'+mes+'-01T00:00:00.000Z';
-        }
-      }
-
-      return meses_anos;
-
-
-    }
 
     async create(data: IndicadorDto) {
 
@@ -76,9 +35,7 @@ export class IndicadorService {
     
         const indicador = await this.prisma.indicador.create({
           data
-        })
-        //Eh preciso criar um coborador-indicador para cada mes_ano ate a dead_line
-
+        })        
     
         return indicador;
       }

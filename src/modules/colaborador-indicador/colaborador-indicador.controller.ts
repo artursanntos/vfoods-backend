@@ -12,7 +12,7 @@ import { CriarColaboradorIndicadorDto } from './dto/criar-colaborador-indicador.
 import { UpdateColaboradorIndicadorDto } from './dto/update-colaborador-indicador.dto';
 import { ColaboradorIndicadorService } from './colaborador-indicador.service';
 
-@Controller('colaborador-indicador')
+@Controller('colaborador-indicador/')
 export class ColaboradorIndicadorController {
   constructor(
     private readonly colaboradorIndicadorService: ColaboradorIndicadorService,
@@ -23,6 +23,13 @@ export class ColaboradorIndicadorController {
     return this.colaboradorIndicadorService.create(
       createColaboradorIndicadorDto,
     );
+  }
+
+  @Post('createMany/:dataDeadLine')
+  createMany(
+    @Param('dataDeadLine') dataDeadLine: string,
+    @Body() createColaboradorIndicadorDto: CriarColaboradorIndicadorDto) {
+    return this.colaboradorIndicadorService.createMany(createColaboradorIndicadorDto, dataDeadLine);
   }
 
   @Patch(':idColaboradorIndicador')

@@ -8,14 +8,102 @@ import { UpdateColaboradorIndicadorDto } from './dto/update-colaborador-indicado
 export class ColaboradorIndicadorService {
   constructor(private prisma: PrismaService) {}
 
+  existe (mes_ano: string,idIndicador: string, idColaborador: string){
+        
+    return this.prisma.colaboradorIndicador.findFirst({
+      where: {
+        mes_ano: mes_ano,
+        idIndicador: idIndicador,
+        idColaborador: idColaborador
+      }
+    })
+  }
+
+  mes_anoAtual () :string{
+    const dataAtual = new Date();
+    const anoAtual = dataAtual.getFullYear();
+    const mesAtual = dataAtual.getMonth()+1;
+    if (mesAtual < 10) {
+      return (anoAtual+'-0'+mesAtual+'-01T00:00:00.000Z');
+    }else{
+      return (anoAtual+'-'+mesAtual+'-01T00:00:00.000Z');
+    } 
+  }
+
+  listaMes_anoAteDeadLine (deadLine: string): string[] {
+    //tenho que colocar todos os mes_ano  ate a dead line em um array 
+    const mes_anoDeadLine = (deadLine.substring(0, 8))+'01T00:00:00.000Z';
+    var mes_ano = this.mes_anoAtual();
+    var chegouDead = false;
+    const meses_anos: string[] = []
+    
+    while (!chegouDead){
+      if (mes_ano === mes_anoDeadLine) {
+        chegouDead=true;
+      }
+      
+      meses_anos.push(mes_ano)
+      //prox mes e ano
+      var ano = parseInt(mes_ano.substring(0, 5));
+      var mes = parseInt(mes_ano.substring(5, 8));
+      if (mes==12) {
+        ano++;
+        mes=0;
+      }
+      mes++;
+      if (mes < 10) {
+        mes_ano = ano+'-0'+mes+'-01T00:00:00.000Z';
+      }else{
+        mes_ano = ano+'-'+mes+'-01T00:00:00.000Z';
+      }
+
+      if (ano===2025) {
+        chegouDead=true;
+      }
+    }
+
+    return meses_anos;
+
+
+  }
+  
   async create(
     data: CriarColaboradorIndicadorDto,
   ): Promise<ColaboradorIndicador> {
+    
+    const colabIndExiste = await this.existe(data.mes_ano, data.idIndicador, data.idColaborador);
+    
+    if (colabIndExiste) {
+      throw new Error('Não é possível criar o mesmo Colaborador-indicador.')
+    }
+    
     const colaboradorIndicador = this.prisma.colaboradorIndicador.create({
       data,
     });
 
     return colaboradorIndicador;
+  }
+
+  async createMany(
+    data: CriarColaboradorIndicadorDto,
+    dataDeadLine: string 
+  ) {
+
+    const listaMes_anoAteDeadLine: string[] = this.listaMes_anoAteDeadLine(dataDeadLine);
+
+    var dataAux:CriarColaboradorIndicadorDto=data;
+    
+
+    listaMes_anoAteDeadLine.forEach(valor => {
+      dataAux.mes_ano=valor;
+
+      this.create(dataAux);
+
+    });
+
+    
+
+    return listaMes_anoAteDeadLine;
   }
 
   async update(
