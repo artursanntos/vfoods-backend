@@ -60,6 +60,58 @@ export class ColaboradorIndicadorService {
     });
   }
 
+  async getPercentualDeMetasPorIndicadorPorMes(
+    idIndicador: string,
+    mes_ano: string
+  ) {
+
+
+    const colabInds = await this.prisma.colaboradorIndicador.findMany({
+      where: { idIndicador: idIndicador, mes_ano: mes_ano},
+    });
+
+    const totalColab = colabInds.length;
+
+    var numDesafios = 0;
+    var numSMetas = 0;
+    var numMetas = 0;
+    var numFracasso = 0;
+
+    colabInds.forEach(colabInd => {
+
+      if (colabInd.resultado>=colabInd.desafio) {
+
+        numDesafios++;
+
+      }else if (colabInd.resultado>=colabInd.superMeta) {
+
+        numSMetas++
+        
+      }else if (colabInd.resultado>=colabInd.meta) {
+        
+        numMetas++;
+
+      }else {
+
+        numFracasso++;
+
+      }
+
+      
+      
+    });
+
+    numDesafios= numDesafios/totalColab;
+    numSMetas= numSMetas/totalColab;
+    numMetas= numMetas/totalColab;
+    numFracasso= numFracasso/totalColab;
+
+    return {numDesafios, numSMetas, numMetas, numFracasso};
+
+  }
+
+  
+
 
   async getPercentualDeMetasBatidasPorMes(idColaborador: string, mes_ano: string): Promise<number[]>{
 

@@ -94,6 +94,15 @@ export class ColaboradorIndicadorController {
     return { colaboradorIndicadores };
   }
 
+  //em um unico meses
+  @Get('/getPercentualDeMetasPorIndicadorPorMes/:idIndicador/:date')
+  async getPercentualDeMetasPorIndicadorPorMes(
+    @Param('idIndicador') id: string,
+    @Param('date') date: string,
+  ) {
+    return await this.colaboradorIndicadorService.getPercentualDeMetasPorIndicadorPorMes(id, date);
+  }
+
   //intervalo de 6 meses
   @Get('/getPercentualDeMetasBatidasLastXMonths/:idColaborador/:date')
   async getPercentualDeMetasBatidasLast6Months(
