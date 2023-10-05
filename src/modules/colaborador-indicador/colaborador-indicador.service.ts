@@ -99,7 +99,7 @@ export class ColaboradorIndicadorService {
       metaSmetaDesafio[2]/totalIndicadoresNoMes,
     ]
 
-    return metaSmetaDesafio;
+    return pescentualMetaSmetaDesafio;
     
   }
 

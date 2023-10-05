@@ -26,6 +26,12 @@ export class MetasMesIndicadorController {
       return this.metasMesIndicadorService.findAllMeses(idIndicador);
     }
 
+    @Get('auxGraph/byInterval/:mes_ano/:intervalo')
+    async findAllByInterval(@Param('mes_ano') mes_ano: string, @Param('intervalo') intervalo: number) {
+      return this.metasMesIndicadorService.findAllByInterval(mes_ano, intervalo);
+    }
+    
+
     //updade mmi
     @Put(':idIndicador/:mes/:ano')
     async update(@Param('idIndicador') idIndicador: string, @Param('mes') mes: string, @Param('ano') ano: string, @Body() data:MetasMesIndicadorDto) {
