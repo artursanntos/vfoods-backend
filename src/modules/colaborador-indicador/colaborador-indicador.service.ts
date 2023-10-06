@@ -121,14 +121,7 @@ export class ColaboradorIndicadorService {
           idColaborador: data.idColaborador}
       });
 
-    } else{
-      
-      const aux:number = mmiToUpdate.totalColab+1;
-      await this.prisma.metasMesIndicador.update({
-        where: { id: mmiToUpdate.id },
-        data :{totalColab: aux},
-      });
-    }
+    } 
 
     return colaboradorIndicador;
   }
