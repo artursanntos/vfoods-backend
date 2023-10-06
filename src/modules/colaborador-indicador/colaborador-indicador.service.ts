@@ -76,10 +76,36 @@ export class ColaboradorIndicadorService {
     if (colabIndExiste) {
       throw new Error('Não é possível criar o mesmo Colaborador-indicador.')
     }
+
+    
     
     const colaboradorIndicador = this.prisma.colaboradorIndicador.create({
       data,
     });
+
+    //vejo se ja existe a linha, caso nao eu crio
+    var mmiToUpdate = await this.prisma.metasMesIndicador.findFirst({
+      where: { mes_ano: data.mes_ano, idIndicador: data.idIndicador },
+    });
+
+    if (!mmiToUpdate) {
+      mmiToUpdate = await this.prisma.metasMesIndicador.create({
+         data: { mes_ano: data.mes_ano, 
+          totalColabBateramMeta: 0, 
+          totalColabBateramSuperMeta: 0, 
+          totalColabBateramDesafio:0, 
+          totalColab: 1,
+          idIndicador: data.idIndicador}
+      });
+
+    }else{
+      
+      const aux:number = mmiToUpdate.totalColab+1;
+      await this.prisma.metasMesIndicador.update({
+        where: { id: mmiToUpdate.id },
+        data :{totalColab: aux},
+      });
+    }
 
     return colaboradorIndicador;
   }
@@ -169,6 +195,50 @@ export class ColaboradorIndicadorService {
         where: { id: notaMensalToUpdate.id },
         data :{notaMensal},
       });
+    }
+
+    //ainda antes de finalizar o update eh necessario atualizar o mmi
+    //aqui so preciso verificar quais metas foram batidas
+    
+    var mmiToUpdate = await this.prisma.metasMesIndicador.findFirst({
+      where: { mes_ano: result.mes_ano, idIndicador: result.idIndicador },
+    });
+    
+    if (notaIndicador==5) {
+      
+      const numD:number = mmiToUpdate.totalColabBateramDesafio+1;
+      const numSM:number = mmiToUpdate.totalColabBateramSuperMeta+1;
+      const numM:number = mmiToUpdate.totalColabBateramMeta+1;
+      await this.prisma.metasMesIndicador.update({
+        where: { id: mmiToUpdate.id },
+        data :{totalColabBateramDesafio: numD,
+          totalColabBateramSuperMeta: numSM,
+          totalColabBateramMeta: numM
+        },
+      });
+
+    } else if (notaIndicador==4) {
+      
+      const numSM:number = mmiToUpdate.totalColabBateramSuperMeta+1;
+      const numM:number = mmiToUpdate.totalColabBateramMeta+1;
+      await this.prisma.metasMesIndicador.update({
+        where: { id: mmiToUpdate.id },
+        data :{
+          totalColabBateramSuperMeta: numSM,
+          totalColabBateramMeta: numM
+        },
+      });
+
+    } else if (notaIndicador==3) {
+      
+      const numM:number = mmiToUpdate.totalColabBateramMeta+1;
+      await this.prisma.metasMesIndicador.update({
+        where: { id: mmiToUpdate.id },
+        data :{
+          totalColabBateramMeta: numM
+        },
+      });
+
     }
 
     return result;
