@@ -30,6 +30,11 @@ export class MetasMesIndicadorController {
     async findAllByInterval(@Param('mes_ano') mes_ano: string, @Param('intervalo') intervalo: number) {
       return this.metasMesIndicadorService.findAllByInterval(mes_ano, intervalo);
     }
+
+    @Get('auxGraph/circularPB/FromHome/:mes_ano')
+    async getPercentualMetasBatidasByMonth(@Param('mes_ano') mes_ano: string) {
+      return this.metasMesIndicadorService.getPercentualMetasBatidasByMonth(mes_ano);
+    }
     
 
     //updade mmi

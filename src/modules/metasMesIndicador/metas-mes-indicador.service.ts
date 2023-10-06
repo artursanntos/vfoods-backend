@@ -59,6 +59,29 @@ export class MetasMesIndicadorService {
         return mmiExiste;
     }
 
+    async getPercentualMetasBatidasByMonth (mes_ano: string){
+
+      const mmis = await this.prisma.metasMesIndicador.findMany({
+        where: {
+          mes_ano: mes_ano
+        }
+      })
+
+      var numMetas = 0;
+      var metasBatidas = 0;
+
+      mmis.forEach(mmi => {
+        metasBatidas = metasBatidas + mmi.totalColabBateramMeta;
+        numMetas = numMetas + mmi.totalColab;
+      });
+
+      const result = metasBatidas/numMetas;
+
+      return result;
+
+
+  }
+
     async findAllMeses(idIndicador: string) {
       
       const mmi = await this.prisma.metasMesIndicador.findMany({

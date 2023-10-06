@@ -110,10 +110,45 @@ export class ColaboradorIndicadorService {
     id: string,
     updateData: UpdateColaboradorIndicadorDto,
   ): Promise<ColaboradorIndicador> {
-    return this.prisma.colaboradorIndicador.update({
+    //verificar se sera necessario reenviar o valor de cada tipo de meta
+    //caso se ja - fazer um find com o id
+
+    return await this.prisma.colaboradorIndicador.update({
       where: { id },
       data: updateData,
     });
+
+    /*
+    const colabInd = await this.prisma.colaboradorIndicador.findFirst({
+      where: { id },
+    })
+
+    var notaIndicador = 0;
+
+    if (colabInd.notaIndicador>=colabInd.desafio) {
+
+      notaIndicador=5;
+
+    } else if (colabInd.notaIndicador>=colabInd.superMeta) {
+
+      notaIndicador=4;
+
+    } else if (colabInd.notaIndicador>=colabInd.meta) {
+
+      notaIndicador= 3;
+
+    }else{
+      //regra de 3 para calcular a nota
+      notaIndicador=(3 * colabInd.resultado)/colabInd.meta;
+
+    }
+
+    await this.prisma.colaboradorIndicador.update({
+      where: { id },
+      {notaIndicador},
+    });*/
+
+
   }
 
   async remove(id: string): Promise<ColaboradorIndicador> {
