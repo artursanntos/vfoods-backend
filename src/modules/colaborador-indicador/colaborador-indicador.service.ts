@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import { CriarColaboradorIndicadorDto } from './dto/criar-colaborador-indicador.dto';
 import { ColaboradorIndicador, Prisma } from '@prisma/client';
@@ -88,6 +89,7 @@ export class ColaboradorIndicadorService {
     var mmiToUpdate = await this.prisma.metasMesIndicador.findFirst({
       where: { mes_ano: data.mes_ano, idIndicador: data.idIndicador },
     });
+    console.log(mmiToUpdate);
 
     if (mmiToUpdate==null) {
       mmiToUpdate = await this.prisma.metasMesIndicador.create({
@@ -154,6 +156,8 @@ export class ColaboradorIndicadorService {
     updateData: UpdateColaboradorIndicadorDto,
   ): Promise<ColaboradorIndicador> {
 
+    console.log(updateData.mes_ano)
+
     const colabInd = await this.prisma.colaboradorIndicador.update({
       where: { id },
       data: updateData,
@@ -203,7 +207,9 @@ export class ColaboradorIndicadorService {
       where: { mesAno:result.mes_ano, idColaborador: result.idColaborador },
     });
 
-    if (notaMensalToUpdate = null) {
+    console.log(notaMensalToUpdate)
+
+    if (notaMensalToUpdate == null) {
       notaMensalToUpdate = await this.prisma.notaMensalColaborador.create({
          data: {mesAno:result.mes_ano, notaMensal:notaMensal, idColaborador: result.idColaborador}
       });
@@ -216,6 +222,7 @@ export class ColaboradorIndicadorService {
 
     //ainda antes de finalizar o update eh necessario atualizar o mmi
     //aqui so preciso verificar quais metas foram batidas
+    console.log(result.mes_ano)
     
     var mmiToUpdate = await this.prisma.metasMesIndicador.findFirst({
       where: { mes_ano: result.mes_ano, idIndicador: result.idIndicador },
