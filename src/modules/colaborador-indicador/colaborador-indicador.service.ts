@@ -115,7 +115,7 @@ export class ColaboradorIndicadorService {
       where: { id },
       data: updateData,
     });
-
+    //calculando nota do indicador
     var notaIndicador = 0;
 
     if (colabInd.resultado>=colabInd.desafio) {
@@ -136,10 +136,42 @@ export class ColaboradorIndicadorService {
 
     }
 
-    return await this.prisma.colaboradorIndicador.update({
+    const result = await this.prisma.colaboradorIndicador.update({
       where: { id },
       data :{notaIndicador},
     });
+
+    //antes de retornar com a atualizacao -> fazer a atualizacao nas notas mensais
+    //pegando todas as notas 
+    const allColabInd = await this.findAllOfColaboratorByMonth(result.idColaborador, result.mes_ano.toISOString());
+
+    var somaNotaXPeso = 0;
+    var somaPesos = 0;
+    //fazendo o calculo da nota mensal
+    allColabInd.forEach(indicador => {
+      somaNotaXPeso = somaNotaXPeso+(indicador.notaIndicador * indicador.peso);
+      somaPesos = somaPesos + indicador.peso;
+    });
+
+    const notaMensal = somaNotaXPeso/somaPesos;
+
+    //vejo se ja existe a linha, caso nao eu crio
+    var notaMensalToUpdate = await this.prisma.notaMensalColaborador.findFirst({
+      where: { mesAno:result.mes_ano, idColaborador: result.idColaborador },
+    });
+
+    if (!notaMensalToUpdate) {
+      notaMensalToUpdate = await this.prisma.notaMensalColaborador.create({
+         data: {mesAno:result.mes_ano, notaMensal:notaMensal, idColaborador: result.idColaborador}
+      });
+    }else{
+      await this.prisma.notaMensalColaborador.update({
+        where: { id: notaMensalToUpdate.id },
+        data :{notaMensal},
+      });
+    }
+
+    return result;
 
 
   }
