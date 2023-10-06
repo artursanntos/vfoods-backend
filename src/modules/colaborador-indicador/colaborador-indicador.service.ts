@@ -110,30 +110,23 @@ export class ColaboradorIndicadorService {
     id: string,
     updateData: UpdateColaboradorIndicadorDto,
   ): Promise<ColaboradorIndicador> {
-    //verificar se sera necessario reenviar o valor de cada tipo de meta
-    //caso se ja - fazer um find com o id
 
-    return await this.prisma.colaboradorIndicador.update({
+    const colabInd = await this.prisma.colaboradorIndicador.update({
       where: { id },
       data: updateData,
     });
 
-    /*
-    const colabInd = await this.prisma.colaboradorIndicador.findFirst({
-      where: { id },
-    })
-
     var notaIndicador = 0;
 
-    if (colabInd.notaIndicador>=colabInd.desafio) {
+    if (colabInd.resultado>=colabInd.desafio) {
 
       notaIndicador=5;
 
-    } else if (colabInd.notaIndicador>=colabInd.superMeta) {
+    } else if (colabInd.resultado>=colabInd.superMeta) {
 
       notaIndicador=4;
 
-    } else if (colabInd.notaIndicador>=colabInd.meta) {
+    } else if (colabInd.resultado>=colabInd.meta) {
 
       notaIndicador= 3;
 
@@ -143,10 +136,10 @@ export class ColaboradorIndicadorService {
 
     }
 
-    await this.prisma.colaboradorIndicador.update({
+    return await this.prisma.colaboradorIndicador.update({
       where: { id },
-      {notaIndicador},
-    });*/
+      data :{notaIndicador},
+    });
 
 
   }
