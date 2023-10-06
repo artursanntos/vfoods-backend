@@ -83,7 +83,7 @@ export class ColaboradorIndicadorService {
       data,
     });
 
-    //vejo se ja existe a linha, caso nao eu crio
+    //vejo se ja existe a mmi, caso nao eu crio
     
     var mmiToUpdate = await this.prisma.metasMesIndicador.findFirst({
       where: { mes_ano: data.mes_ano, idIndicador: data.idIndicador },
@@ -97,6 +97,28 @@ export class ColaboradorIndicadorService {
           totalColabBateramDesafio:0, 
           totalColab: 1,
           idIndicador: data.idIndicador}
+      });
+
+    } else{
+      
+      const aux:number = mmiToUpdate.totalColab+1;
+      await this.prisma.metasMesIndicador.update({
+        where: { id: mmiToUpdate.id },
+        data :{totalColab: aux},
+      });
+    }
+
+    //vejo se ja existe a nota mensal, caso nao eu crio
+    
+    var notaMensalToCreate = await this.prisma.notaMensalColaborador.findFirst({
+      where: { mesAno: data.mes_ano, idColaborador: data.idColaborador },
+    });
+
+    if (notaMensalToCreate==null) {
+      notaMensalToCreate = await this.prisma.notaMensalColaborador.create({
+         data: { mesAno: data.mes_ano, 
+          notaMensal: -1, //valor antes da primeira atualização
+          idColaborador: data.idColaborador}
       });
 
     } else{
