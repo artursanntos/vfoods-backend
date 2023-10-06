@@ -84,11 +84,12 @@ export class ColaboradorIndicadorService {
     });
 
     //vejo se ja existe a linha, caso nao eu crio
+    
     var mmiToUpdate = await this.prisma.metasMesIndicador.findFirst({
       where: { mes_ano: data.mes_ano, idIndicador: data.idIndicador },
     });
 
-    if (!mmiToUpdate) {
+    if (mmiToUpdate==null) {
       mmiToUpdate = await this.prisma.metasMesIndicador.create({
          data: { mes_ano: data.mes_ano, 
           totalColabBateramMeta: 0, 
@@ -98,7 +99,7 @@ export class ColaboradorIndicadorService {
           idIndicador: data.idIndicador}
       });
 
-    }else{
+    } else{
       
       const aux:number = mmiToUpdate.totalColab+1;
       await this.prisma.metasMesIndicador.update({
@@ -120,10 +121,11 @@ export class ColaboradorIndicadorService {
     var dataAux:CriarColaboradorIndicadorDto=data;
     
 
-    listaMes_anoAteDeadLine.forEach(valor => {
-      dataAux.mes_ano=valor;
+    listaMes_anoAteDeadLine.forEach(async valor => {
+      const dataAuxCopy = { ...dataAux }; // Crie uma cópia separada de dataAux
+      dataAuxCopy.mes_ano = valor;
 
-      this.create(dataAux);
+      await this.create(dataAuxCopy);
 
     });
 
@@ -186,7 +188,7 @@ export class ColaboradorIndicadorService {
       where: { mesAno:result.mes_ano, idColaborador: result.idColaborador },
     });
 
-    if (!notaMensalToUpdate) {
+    if (notaMensalToUpdate = null) {
       notaMensalToUpdate = await this.prisma.notaMensalColaborador.create({
          data: {mesAno:result.mes_ano, notaMensal:notaMensal, idColaborador: result.idColaborador}
       });
