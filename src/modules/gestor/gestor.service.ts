@@ -1,11 +1,15 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { GestorDto } from './dto/gestor.dto';
 import { PrismaService } from 'src/database/prisma.service';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class GestorService {
 
-    constructor(private prisma: PrismaService) {}
+    constructor(
+      private prisma: PrismaService,
+      private jwtService: JwtService
+      ) {}
 
     existe (email: string){
         return this.prisma.gestor.findFirst({
@@ -42,7 +46,26 @@ export class GestorService {
         }
     
         return gestorExiste;
-      }
+    }
+    
+    async login(email: string, senha: string) {
+        const gestorExiste = await this.existe(email);
+    
+        if (!gestorExiste) {
+          throw new Error('Este gestor não foi cadastrado')
+        }
+    
+        if (gestorExiste.senha != senha) {
+          throw new UnauthorizedException('Senha incorreta')
+        }
+        
+        const payload = {sub: gestorExiste.id, email: gestorExiste.email};
+        
+        return {
+          access_token: await this.jwtService.signAsync(payload)
+        }
+    }
+    
 
     async remove(email: string) {
         const gestorExiste = await this.existe(email);

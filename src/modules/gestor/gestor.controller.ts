@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, HttpCode, HttpStatus } from '@nestjs/common';
 import { GestorDto } from './dto/gestor.dto';
 import { GestorService } from './gestor.service';
 
@@ -16,6 +16,12 @@ export class GestorController {
     @Get(':email')
     async findOne(@Param('email') email: string) {
       return this.gestorService.findOne(email);
+    }
+
+    @HttpCode(HttpStatus.OK)
+    @Post('/login/')
+    async login(@Body('email') email: string, @Body('senha') senha: string) {
+      return this.gestorService.login(email, senha);
     }
 
     //excluir gestor
